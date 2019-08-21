@@ -42,13 +42,9 @@ let conversation_pipeline = [subject, challenge_options];
 
 const NGrams = natural.NGrams;
 // NGrams.trigrams(['some',  'other', 'words',  'here'])
+
 let randomizer = function(list_items) {
     return list_items[Math.floor(Math.random() * Math.floor(list_items.length))];
-    // let tmp = list_items[Math.floor(Math.random() * Math.floor(list_items.length))];
-    // while(tmp.length > 0 && typeof(tmp) !== 'string'){
-        // tmp = tmp[Math.floor(Math.random() * Math.floor(tmp.length))];
-    // }
-    // return tmp;
 }
 
 function isDict(v) {
@@ -58,22 +54,16 @@ function isDict(v) {
 let res = "";
 while(conversation_pipeline.length > 0) {
     el = conversation_pipeline.shift();  // remove first element
-    // res = res + " " + randomizer(el);
-    console.log(conversation_pipeline);
-    // console.log(el);
-    // if(isDict(el)) {
+    // console.log(conversation_pipeline);
     if(isDict(el)) {
-        // console.log("This is a dict", el)
         res = res + " " + randomizer(el.text);
         candidate = randomizer(el.options);
         conversation_pipeline.unshift(candidate);  // add to the end of the array
     }
     else if(typeof el === 'string' || el instanceof String) {
-        // console.log("This is a string", el)
         res = res + " " + el;
     }
     else {
-        // console.log("This is an array", el)
         conversation_pipeline.unshift(randomizer(el));
     }
 }
