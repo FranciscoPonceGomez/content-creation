@@ -19,7 +19,7 @@ let elimination = {
     ]
 };
 
-let eliminated = {
+let death = {
     "text": ['will be eliminated', 'will get rekt'],
     "options": [
         [time_variable],
@@ -41,8 +41,19 @@ let survival = {
     ]
 };
 
-let challenge_options = [elimination, eliminated, survival, position];
-// let challenge_options = [elimination];
+let start = {
+    "text": ['streamer', 'player'],
+    "options": [
+        [elimination],
+        [death],
+        [survival],
+        [position]
+    ]
+}
+
+
+// let challenge_options = [elimination, death, survival, position];
+let challenge_options = [start];
 let conversation_pipeline = [subject, challenge_options];
 
 const NGrams = natural.NGrams;
