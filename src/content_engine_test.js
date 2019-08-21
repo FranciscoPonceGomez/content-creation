@@ -4,7 +4,7 @@ const natural = require('natural')
 // vocabulary
 const human_touch = ['Wow that was crazy! Do you think', 'Did it again!'];
 const subject = ['streamer', 'player'];
-const numbers = [1,2,3,4,5,6,7,8,9];
+const numbers = [2,3,4,5,6,7,8,9];
 const time_variable = [numbers.map(x => 'in the next ' + x + ' minutes'), 'before end of game'];
 const rank_variable = ['top 50', 'top 25', 'top 10', 'top 5'];
 const count_variable = [numbers.map(x => x + ' players'), numbers.map(x => x + ' times')];
@@ -54,7 +54,7 @@ let start = {
 
 // let challenge_options = [elimination, death, survival, position];
 let challenge_options = [start];
-let conversation_pipeline = [subject, challenge_options];
+let conversation_pipeline = [challenge_options];
 
 const NGrams = natural.NGrams;
 // NGrams.trigrams(['some',  'other', 'words',  'here'])
