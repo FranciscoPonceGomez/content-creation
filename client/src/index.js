@@ -8,6 +8,9 @@ class HelloMessage extends React.Component {
           <video autoPlay loop muted inline height="100%" width="100%">
               <source src={backgroundGif} type="video/mp4"></source>
           </video>
+          		  {/* <Route exact path='/' component={Home}/> */}
+		            {/* <Route exact path='/predict' component={ContentEngine}/> */}
+		            {/* <Route exact path='/error' component={ErrorDisplay}/> */}
     </div> 
   }
 }

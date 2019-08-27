@@ -4,6 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
+    "express": "^4.17.1",
     "natural": "^0.6.3",
     "parcel-bundler": "^1.12.3",
     "react": "^16.9.0",
@@ -11,7 +12,8 @@
     "spacy-nlp": "^1.0.11"
   },
   "scripts": {
-    "dev": "parcel index.html --https"
+    "dev": "parcel client/src/index.html --https",
+    "server": "node server/server.js"
   },
   "devDependencies": {
     "prettier": "1.18.2"
