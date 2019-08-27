@@ -2,6 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import backgroundGif from "../img/fortnite.mp4";
 import {StyledButton, ButtonGroup, StyledButtonSecondary} from './ui/button';
+import Timer from './timer';
 
 class Home extends React.Component {
   render() {
@@ -58,6 +59,7 @@ class Home extends React.Component {
                   -
                 </StyledButtonSecondary>
           </ButtonGroup>
+          <Timer></Timer>
       </div>
       
           <video autoPlay loop muted inline height="100%" width="100%">
