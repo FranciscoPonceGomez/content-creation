@@ -60,7 +60,7 @@ let start = {
 
 module.exports = (app) => {
     app.get('/predict', (req, res) => {
-        
+       console.log('predicted!'); 
 
     });
 };

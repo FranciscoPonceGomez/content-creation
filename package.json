@@ -9,10 +9,11 @@
     "parcel-bundler": "^1.12.3",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
+    "react-router-dom": "^5.0.1",
     "spacy-nlp": "^1.0.11"
   },
   "scripts": {
-    "dev": "parcel client/src/index.html --https",
+    "client": "parcel client/src/index.html --https",
     "server": "node server/server.js"
   },
   "devDependencies": {

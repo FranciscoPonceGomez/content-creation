@@ -1,5 +1,5 @@
-const fs = require('fs');
-const path = require('path');
+// const fs = require('fs');
+import fs from 'fs';
 
 module.exports = (app) => {
 	fs.readdirSync(`${__dirname}/api/`).forEach((file) => {
