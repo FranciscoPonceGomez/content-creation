@@ -2,8 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
-//Views
-import Home from './components/Home';
+import Home from '../src/components/Home';
 
 ReactDOM.render(
 

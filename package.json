@@ -10,10 +10,12 @@
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
     "react-router-dom": "^5.0.1",
-    "spacy-nlp": "^1.0.11"
+    "spacy-nlp": "^1.0.11",
+    "styled-components": "^4.3.2",
+    "ui": "^0.2.4"
   },
   "scripts": {
-    "client": "parcel client/src/index.html --https",
+    "client": "parcel client/public/index.html --https",
     "server": "node server/server.js"
   },
   "devDependencies": {
