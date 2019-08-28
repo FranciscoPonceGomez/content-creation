@@ -59,8 +59,15 @@ let start = {
 }
 
 module.exports = (app) => {
-    app.get('/predict', (req, res) => {
-       console.log('predicted!'); 
+    let zipcode;
 
-    });
+    app.post('/predict', (req, res) => {
+            zipcode = req.body.zipcode;
+       
+            if(!zipcode || zipcode.length < 5 || zipcode.length > 5) {
+                res.redirect('/error');
+            } else { 
+                res.redirect('/current-weather');
+            }
+    })
 };
