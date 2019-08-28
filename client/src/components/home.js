@@ -5,6 +5,46 @@ import {StyledButton, ButtonGroup, StyledButtonSecondary} from './ui/button';
 import Timer from './timer';
 
 class Home extends React.Component {
+  constructor() {
+    super();
+    this.state = {};
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  handleSubmit(event) {
+    event.preventDefault();
+    if (!event.target.checkValidity()) {
+    	this.setState({
+        invalid: true,
+        displayErrors: true,
+      });
+      return;
+    }
+    const form = event.target;
+    const data = new FormData(form);
+
+    for (let name of data.keys()) {
+      const input = form.elements[name];
+      const parserName = input.dataset.parse;
+      console.log('parser name is', parserName);
+      if (parserName) {
+        const parsedValue = inputParsers[parserName](data.get(name))
+        data.set(name, parsedValue);
+      }
+    }
+    
+    // this.setState({
+    // 	res: stringifyFormData(data),
+    //   invalid: false,
+    //   displayErrors: false,
+    // });
+
+    fetch('https://localhost:5000/predict', {
+      method: 'POST',
+      body: data,
+    });
+  }
+
   render() {
     return <div style={{display: 'flex', justifyContent: 'center'}}>
       <div>
@@ -61,12 +101,13 @@ class Home extends React.Component {
                 </StyledButtonSecondary>
           </ButtonGroup> */}
           <div className='gameState'>
-	          <form method='POST' action='/predict'>
+            {/* <form method='POST' action='/predict'> */}
+            <form onSubmit={this.handleSubmit}>
               <p>Kills</p>
 	            <input type='text' placeholder='Kills' name='kills' defaultValue='0'/>
               <p>Remaining players</p>
 	            <input type='text' placeholder='Players' name='players' defaultValue='0'/>
-              <p>time</p>
+              <p>Time</p>
 	            <input type='text' placeholder='time' name='time' defaultValue='15:00'/>
               {/* <Timer></Timer> */}
 	            <StyledButton>Send data</StyledButton>
