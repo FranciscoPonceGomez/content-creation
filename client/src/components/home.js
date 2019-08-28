@@ -33,16 +33,20 @@ class Home extends React.Component {
       }
     }
     
-    // this.setState({
-    // 	res: stringifyFormData(data),
-    //   invalid: false,
-    //   displayErrors: false,
-    // });
-
-    fetch('https://localhost:5000/predict', {
-      method: 'POST',
-      body: data,
+    this.setState({
+    	res: JSON.stringify(data),
+      invalid: false,
+      displayErrors: false,
     });
+
+    fetch('http://localhost:5000/predict', {
+      method: 'POST',
+      mode: 'cors',
+      body: data,
+    })
+    .then((data) => data.json())
+    .then((res) => this.setState({ data: res.data }));;
+    console.log(this.state.data);
   }
 
   render() {
