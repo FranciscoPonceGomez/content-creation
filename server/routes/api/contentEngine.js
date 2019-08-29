@@ -60,8 +60,9 @@ let start = {
 
 module.exports = (app) => {
     app.post('/predict', (req, res) => {
-        data = req.body.data;
+        data = req.body;
+        console.log(data)
         console.log('Sucess');
-        res.send({response: 'Sucess', data: data});
+        res.send({response: 'sucess', data: req.body});
     })
 };

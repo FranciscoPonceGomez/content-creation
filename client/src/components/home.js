@@ -13,36 +13,44 @@ class Home extends React.Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    // if (!event.target.checkValidity()) {
-    // 	this.setState({
-    //     invalid: true,
-    //     displayErrors: true,
-    //   });
-    //   return;
+    const data = new FormData(event.target);
+    let payload = {}
+
+    // const form = event.target;
+    // const data = new FormData(form);
+    // console.log(data);
+    // for (let name of data.keys()) {
+    //   const input = form.elements[name];
+    //   const parserName = input.dataset.parse;
+    //   console.log('parser name is', parserName);
+    //   if (parserName) {
+    //     const parsedValue = inputParsers[parserName](data.get(name))
+    //     data.set(name, parsedValue);
+    //   }
     // }
-    const form = event.target;
-    const data = new FormData(form);
+    
+    // this.setState({
+    // 	res: JSON.stringify(data),
+    //   invalid: false,
+    //   displayErrors: false,
+    // });
 
     for (let name of data.keys()) {
-      const input = form.elements[name];
-      const parserName = input.dataset.parse;
-      console.log('parser name is', parserName);
-      if (parserName) {
-        const parsedValue = inputParsers[parserName](data.get(name))
-        data.set(name, parsedValue);
+      if (name !== 'undefined') {
+        payload[name] = data.get(name);
       }
     }
-    
-    this.setState({
-    	res: JSON.stringify(data),
-      invalid: false,
-      displayErrors: false,
-    });
+    console.log(payload);
 
     fetch('http://localhost:5000/predict', {
       method: 'POST',
       mode: 'cors',
-      body: data,
+      headers: {
+        'Content-Type': 'application/json',
+        // 'Access-Control-Allow-Origin':'*',
+        // 'Content-Type': 'multipart/form-data'
+      },
+      body: JSON.stringify({game_state: payload}),
     })
     .then((data) => data.json())
     .then((res) => this.setState({ data: res.data }));;
@@ -144,7 +152,7 @@ class Home extends React.Component {
               <p>Kills</p>
 	            <input type='text' placeholder='Kills' name='kills' defaultValue='0'/>
               <p>Remaining players</p>
-	            <input type='text' placeholder='Players' name='players' defaultValue='0'/>
+	            <input type='text' placeholder='Players' name='players' defaultValue='100'/>
               <p>Time</p>
 	            <input type='text' placeholder='time' name='time' defaultValue='15:00'/>
               {/* <Timer></Timer> */}
