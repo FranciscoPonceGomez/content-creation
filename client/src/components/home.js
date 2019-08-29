@@ -11,60 +11,77 @@ class Home extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  // handleSubmit(event) {
-  //   event.preventDefault();
-  //   if (!event.target.checkValidity()) {
-  //   	this.setState({
-  //       invalid: true,
-  //       displayErrors: true,
-  //     });
-  //     return;
-  //   }
-  //   const form = event.target;
-  //   const data = new FormData(form);
+  handleSubmit(event) {
+    event.preventDefault();
+    // if (!event.target.checkValidity()) {
+    // 	this.setState({
+    //     invalid: true,
+    //     displayErrors: true,
+    //   });
+    //   return;
+    // }
+    const form = event.target;
+    const data = new FormData(form);
 
-  //   for (let name of data.keys()) {
-  //     const input = form.elements[name];
-  //     const parserName = input.dataset.parse;
-  //     console.log('parser name is', parserName);
-  //     if (parserName) {
-  //       const parsedValue = inputParsers[parserName](data.get(name))
-  //       data.set(name, parsedValue);
-  //     }
-  //   }
+    for (let name of data.keys()) {
+      const input = form.elements[name];
+      const parserName = input.dataset.parse;
+      console.log('parser name is', parserName);
+      if (parserName) {
+        const parsedValue = inputParsers[parserName](data.get(name))
+        data.set(name, parsedValue);
+      }
+    }
     
-  //   this.setState({
-  //   	res: JSON.stringify(data),
-  //     invalid: false,
-  //     displayErrors: false,
-  //   });
+    this.setState({
+    	res: JSON.stringify(data),
+      invalid: false,
+      displayErrors: false,
+    });
 
-  //   fetch('/predict', {
-  //     method: 'POST',
-  //     mode: 'cors',
-  //     body: data,
-  //   })
-  //   .then((data) => data.json())
-  //   .then((res) => this.setState({ data: res.data }));;
-  //   console.log(this.state.data);
-  // }
-
-  handleSubmit = async e => {
-    e.preventDefault();
-    const response = await fetch('/predict', {
+    fetch('http://localhost:5000/predict', {
       method: 'POST',
       mode: 'cors',
-      headers: {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin':'*',
-        // 'Content-Type': 'multipart/form-data'
-      },
-      body: JSON.stringify({ post: this.state.post }),
-    });
-    const body = await response.text();
+      body: data,
+    })
+    .then((data) => data.json())
+    .then((res) => this.setState({ data: res.data }));;
+    console.log(this.state.data);
+  }
+
+  // handleSubmit = async e => {
+  //   e.preventDefault();
+  //   const response = await fetch('/predict', {
+  //     method: 'POST',
+  //     mode: 'cors',
+  //     headers: {
+  //       // 'Content-Type': 'application/json',
+  //       'Access-Control-Allow-Origin':'*',
+  //       'Content-Type': 'multipart/form-data'
+  //     },
+  //     body: JSON.stringify({ post: this.state.post }),
+  //   });
+  //   const body = await response.text();
     
-    this.setState({ responseToPost: body });
-  };
+  //   this.setState({ responseToPost: body });
+  // };
+
+  // async handleSubmit(e) {
+  //     e.preventDefault();
+  //     const response = await fetch('/predict', {
+  //     method: 'POST',
+  //     mode: 'cors',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //       // 'Access-Control-Allow-Origin':'*',
+  //       // 'Content-Type': 'multipart/form-data',
+  //     },
+  //     body: JSON.stringify({ post: this.state.post }),
+  //   });
+  //   const body = await response.text();
+    
+  //   this.setState({ responseToPost: body });
+  // };
 
   render() {
     return <div style={{display: 'flex', justifyContent: 'center'}}>
