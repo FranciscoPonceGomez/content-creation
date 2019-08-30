@@ -30,35 +30,10 @@ class Home extends React.Component{
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  // componentDidMount() {
-  //   setTimeout(this.toggle, 1000);
-  // }
-
-  // toggle = () => this.setState({ isOpen: !this.state.isOpen });
-
   handleSubmit(event) {
     event.preventDefault();
     const data = new FormData(event.target);
     let payload = {}
-
-    // const form = event.target;
-    // const data = new FormData(form);
-    // console.log(data);
-    // for (let name of data.keys()) {
-    //   const input = form.elements[name];
-    //   const parserName = input.dataset.parse;
-    //   console.log('parser name is', parserName);
-    //   if (parserName) {
-    //     const parsedValue = inputParsers[parserName](data.get(name))
-    //     data.set(name, parsedValue);
-    //   }
-    // }
-    
-    // this.setState({
-    // 	res: JSON.stringify(data),
-    //   invalid: false,
-    //   displayErrors: false,
-    // });
 
     for (let name of data.keys()) {
       if (name !== 'undefined') {
@@ -72,8 +47,6 @@ class Home extends React.Component{
       mode: 'cors',
       headers: {
         'Content-Type': 'application/json',
-        // 'Access-Control-Allow-Origin':'*',
-        // 'Content-Type': 'multipart/form-data'
       },
       body: JSON.stringify({game_state: payload}),
     })
@@ -81,40 +54,6 @@ class Home extends React.Component{
     .then((res) => this.setState({ data: res.data }));;
     console.log(this.state.data);
   }
-
-  // handleSubmit = async e => {
-  //   e.preventDefault();
-  //   const response = await fetch('/predict', {
-  //     method: 'POST',
-  //     mode: 'cors',
-  //     headers: {
-  //       // 'Content-Type': 'application/json',
-  //       'Access-Control-Allow-Origin':'*',
-  //       'Content-Type': 'multipart/form-data'
-  //     },
-  //     body: JSON.stringify({ post: this.state.post }),
-  //   });
-  //   const body = await response.text();
-    
-  //   this.setState({ responseToPost: body });
-  // };
-
-  // async handleSubmit(e) {
-  //     e.preventDefault();
-  //     const response = await fetch('/predict', {
-  //     method: 'POST',
-  //     mode: 'cors',
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //       // 'Access-Control-Allow-Origin':'*',
-  //       // 'Content-Type': 'multipart/form-data',
-  //     },
-  //     body: JSON.stringify({ post: this.state.post }),
-  //   });
-  //   const body = await response.text();
-    
-  //   this.setState({ responseToPost: body });
-  // };
 
   componentDidMount() {
     setTimeout(this.toggle(), 1000);
@@ -202,8 +141,7 @@ class Home extends React.Component{
               <source src={backgroundGif} type="video/mp4"></source>
           </video>
       <Sidebar className="sidebar" pose={isOpen ? 'open' : 'closed'}>
-        <Item className="item" />
-        <Item className="item" />
+        <Item className="item">Hello</Item>
         <Item className="item" />
         <Item className="item" />
       </Sidebar>
