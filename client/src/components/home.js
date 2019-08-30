@@ -14,7 +14,7 @@ delayChildren: 200,
 staggerChildren: 50,
 opacity: 1
 },
-closed: { x: '-100%', delay: 300, opacity: 0}
+closed: { x: '0%', delay: 300, opacity: 0}
 });
 const Item = posed.li({
 open: { y: 0, opacity: 1 },
