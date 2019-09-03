@@ -8,7 +8,7 @@ const elimination_intro = ['will eliminate', 'will rekt', 'will dominate', 'will
 const death_intro = ['will be eliminated', 'will get rekt', 'will be blasted', 'will be killed'];
 const position_intro = ['will win', 'will lose', 'will get a victory royale'];
 const survival_intro = ['will make it to', 'will survive to', 'will place'];
-const start_intro = ['Streamer X', 'Ninja', 'Shroud'];
+const start_intro = ['Ninja'];
 const numbers = [2,3,4,5,6,7,8,9];
 const time = [numbers.map(x => 'in the next ' + x + ' minutes'), 'before the end of game'];
 const rank = ['top 50', 'top 25', 'top 10', 'top 5', 'top 3'];
@@ -80,19 +80,25 @@ async function challengeSelector(state) {
         cache["kills"] = state.kills;
         cache["players"] = state.players; 
         cache["time"] = state.time;
-        conversation_pipeline.push(start_intro);
-        conversation_pipeline.push(position);
+        for (var i = 0; i < 3; i = i+1) {
+            conversation_pipeline.push(start_intro);
+            conversation_pipeline.push(position);
+        }
         console.log(cache);
     }
     else {
         if (state.kills - cache["kills"] > 0) {
-            conversation_pipeline.push(start_intro);
-            conversation_pipeline.push(elimination);
+            for (var i = 0; i < 3; i = i+1) {
+                conversation_pipeline.push(start_intro);
+                conversation_pipeline.push(elimination);
+            }
             cache["kills"] = state.kills;
         }
         if (cache["players"] - state.players > 0) {
-            conversation_pipeline.push(start_intro);
-            conversation_pipeline.push(randomizer([death, position, survival]));
+            for (var i = 0; i < 3; i = i+1) {
+                conversation_pipeline.push(start_intro);
+                conversation_pipeline.push(randomizer([death, position, survival]));
+            }
             cache["players"] = state.players;
         }
         // if (state.players - cache.get("players") > 0) {
@@ -104,7 +110,7 @@ async function challengeSelector(state) {
     // const NGrams = natural.NGrams;
     // NGrams.trigrams(['some',  'other', 'words',  'here'])
 
-
+    let total_res = [];
     let res = "";
     while(conversation_pipeline.length > 0) {
         el = conversation_pipeline.shift();  // remove first element
@@ -123,8 +129,12 @@ async function challengeSelector(state) {
         }
         console.log(conversation_pipeline);
     }
+    // console.log(res);
+    res = res.replace(/Ninja/gi, ",Ninja");
     console.log(res);
-    return res;
+    total_res = res.split(",").splice(1, 3);
+    console.log("total res", total_res);
+    return total_res;
 }
 
 module.exports = (app) => {
@@ -132,7 +142,7 @@ module.exports = (app) => {
         let data = req.body;
         data = data.game_state;
         let challenges = [];
-        challenges[0] = await challengeSelector(data);
+        challenges = await challengeSelector(data);
         // challenges.push(await challengeSelector(data));
         // challenges.push(await challengeSelector(data));
         // challenges.push(await challengeSelector(data));
