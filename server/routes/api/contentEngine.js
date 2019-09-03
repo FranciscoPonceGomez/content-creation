@@ -58,11 +58,52 @@ let start = {
     ]
 }
 
+let randomizer = function(list_items) {
+    return list_items[Math.floor(Math.random() * Math.floor(list_items.length))];
+}
+
+function isDict(v) {
+    return typeof v==='object' && v!==null && !(v instanceof Array) && !(v instanceof String);
+}
+
+// let challenge_options = [start];
+async function challengeSelector(state) {
+    let conversation_pipeline = [challenge_options];
+
+    const NGrams = natural.NGrams;
+    // NGrams.trigrams(['some',  'other', 'words',  'here'])
+
+
+    let res = "";
+    while(conversation_pipeline.length > 0) {
+        el = conversation_pipeline.shift();  // remove first element
+        if(isDict(el)) {
+            res = res + " " + randomizer(el.text);
+            candidate = randomizer(el.options);
+            for(e of candidate) {
+                conversation_pipeline.unshift(e);  // add to the end of the array
+            }
+        }
+        else if(typeof el === 'string' || el instanceof String) {
+            res = res + " " + el;
+        }
+        else {
+            conversation_pipeline.unshift(randomizer(el));
+        }
+        // console.log(conversation_pipeline);
+    }
+}
+
 module.exports = (app) => {
-    app.post('/predict', (req, res) => {
-        data = req.body;
+    app.post('/predict', async (req, res) => {
+        let data = req.body;
+        data = data.game_state;
+        let challenges = await challengeSelector(data);
+        // for (let name of data.keys()) {
+        //     console.log(name);
+        // }
         console.log(data)
         console.log('Sucess');
-        res.send({response: 'sucess', data: req.body});
+        res.send({response: 'sucess', data: {"1": "Best challenge ever", "2": "second best challenge", "3": "third best challenge"}});
     })
 };

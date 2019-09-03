@@ -6,7 +6,7 @@ body {
   }
   
   .sidebar {
-    width: 300px;
+    width: 500px;
     height: 100vh;
     background: #eeeeee40;
     padding: 30px;
@@ -31,7 +31,7 @@ body {
     color: white;
   }
   .item:nth-child(1) {
-    background: #f69a9a;
+    background: #0000ff;
   }
   
   .item:nth-child(2) {
@@ -46,6 +46,6 @@ body {
     background: #f9cdae;
   }
   
-  .item:nth-child(5) {
+  /* .item:nth-child(5) {
     background: #c8c8a9;
-  }
+  } */

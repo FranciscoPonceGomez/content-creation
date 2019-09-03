@@ -6,7 +6,6 @@ import posed from 'react-pose';
 import './styles.css';
 import Timer from './timer';
 
-const { isOpen } = true;
 const Sidebar = posed.ul({
 open: {
 x: '0%',
@@ -40,7 +39,6 @@ class Home extends React.Component{
         payload[name] = data.get(name);
       }
     }
-    console.log(payload);
 
     fetch('http://localhost:5000/predict', {
       method: 'POST',
@@ -50,9 +48,8 @@ class Home extends React.Component{
       },
       body: JSON.stringify({game_state: payload}),
     })
-    .then((data) => data.json())
-    .then((res) => this.setState({ data: res.data }));;
-    console.log(this.state.data);
+    .then((res) => res.json())
+    .then((data) => this.setState({ data: data.data, challengeReceived: true}));
   }
 
   componentDidMount() {
@@ -60,14 +57,22 @@ class Home extends React.Component{
   }
 
   toggle() {
-    console.log(this.state.isOpen);
-    // this.setState({ isOpen: !this.state.isOpen });
-    this.state.isOpen = !this.state.isOpen;
-    console.log(this.state.isOpen);
+    this.setState({ isOpen: !this.state.isOpen });
   }
 
   render() {
     const { isOpen } = this.state;
+    let challenges;
+    console.log(this.state);
+    if (this.state.challengeReceived) {
+      console.log(this.state);
+      challenges = 
+      <Sidebar className="sidebar" pose={isOpen ? 'open' : 'closed'}>
+        <Item className="item">{this.state.data.kills}</Item>
+        <Item className="item">{this.state.data.players}</Item>
+        <Item className="item">{this.state.data.time}</Item>
+      </Sidebar>
+      }
     return <div style={{display: 'flex', justifyContent: 'center'}}>
       <div>
           {/* <ButtonGroup>
@@ -123,7 +128,6 @@ class Home extends React.Component{
                 </StyledButtonSecondary>
           </ButtonGroup> */}
           <div className='gameState'>
-            {/* <form method='POST' action='/predict'> */}
             <form onSubmit={this.handleSubmit}>
               <p>Kills</p>
 	            <input type='text' placeholder='Kills' name='kills' defaultValue='0'/>
@@ -140,11 +144,7 @@ class Home extends React.Component{
           <video autoPlay loop muted inline height="100%" width="100%">
               <source src={backgroundGif} type="video/mp4"></source>
           </video>
-      <Sidebar className="sidebar" pose={isOpen ? 'open' : 'closed'}>
-        <Item className="item">Hello</Item>
-        <Item className="item" />
-        <Item className="item" />
-      </Sidebar>
+          {challenges}
     </div> 
   }
 }
