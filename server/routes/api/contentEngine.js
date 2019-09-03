@@ -8,15 +8,18 @@ const elimination_intro = ['will eliminate', 'will rekt', 'will dominate', 'will
 const death_intro = ['will be eliminated', 'will get rekt', 'will be blasted', 'will be killed'];
 const position_intro = ['will win', 'will lose', 'will get a victory royale'];
 const survival_intro = ['will make it to', 'will survive to', 'will place'];
-const start_intro = ['Streamer', 'Ninja', 'Shroud'];
+const start_intro = ['Streamer X', 'Ninja', 'Shroud'];
 const numbers = [2,3,4,5,6,7,8,9];
 const time = [numbers.map(x => 'in the next ' + x + ' minutes'), 'before the end of game'];
 const rank = ['top 50', 'top 25', 'top 10', 'top 5', 'top 3'];
 const count = [numbers.map(x => x + ' players'), numbers.map(x => x + ' times')];
 const filler = ['this game', 'this match', 'this session'];
 
+let cache = {}
+
 // semantic relationship
 let elimination = {
+    "type": "elimination",
     "text": elimination_intro,
     "options": [
         [time],
@@ -27,6 +30,7 @@ let elimination = {
 };
 
 let death = {
+    "type": "death",
     "text": death_intro,
     "options": [
         [time]
@@ -34,6 +38,7 @@ let death = {
 };
 
 let position = {
+    "type": "posisition",
     "text": position_intro,
     "options": [
         [filler],
@@ -42,6 +47,7 @@ let position = {
 };
 
 let survival = {
+    "type": "survival",
     "text": survival_intro,
     "options": [
         [rank],
@@ -68,9 +74,34 @@ function isDict(v) {
 
 // let challenge_options = [start];
 async function challengeSelector(state) {
-    let conversation_pipeline = [challenge_options];
+    let conversation_pipeline = [];
+    console.log(cache);
+    if (Object.keys(cache).length == 0) {
+        cache["kills"] = state.kills;
+        cache["players"] = state.players; 
+        cache["time"] = state.time;
+        conversation_pipeline.push(start_intro);
+        conversation_pipeline.push(position);
+        console.log(cache);
+    }
+    else {
+        if (state.kills - cache["kills"] > 0) {
+            conversation_pipeline.push(start_intro);
+            conversation_pipeline.push(elimination);
+            cache["kills"] = state.kills;
+        }
+        if (cache["players"] - state.players > 0) {
+            conversation_pipeline.push(start_intro);
+            conversation_pipeline.push(randomizer([death, position, survival]));
+            cache["players"] = state.players;
+        }
+        // if (state.players - cache.get("players") > 0) {
+        //     conversation_pipeline.push(survival);
+        //     cache["time"] = state.time;
+        // }
+    }
 
-    const NGrams = natural.NGrams;
+    // const NGrams = natural.NGrams;
     // NGrams.trigrams(['some',  'other', 'words',  'here'])
 
 
@@ -90,20 +121,27 @@ async function challengeSelector(state) {
         else {
             conversation_pipeline.unshift(randomizer(el));
         }
-        // console.log(conversation_pipeline);
+        console.log(conversation_pipeline);
     }
+    console.log(res);
+    return res;
 }
 
 module.exports = (app) => {
     app.post('/predict', async (req, res) => {
         let data = req.body;
         data = data.game_state;
-        let challenges = await challengeSelector(data);
+        let challenges = [];
+        challenges[0] = await challengeSelector(data);
+        // challenges.push(await challengeSelector(data));
+        // challenges.push(await challengeSelector(data));
+        // challenges.push(await challengeSelector(data));
+        console.log(challenges);
         // for (let name of data.keys()) {
         //     console.log(name);
         // }
         console.log(data)
         console.log('Sucess');
-        res.send({response: 'sucess', data: {"1": "Best challenge ever", "2": "second best challenge", "3": "third best challenge"}});
+        res.send({response: 'sucess', challenges: challenges});
     })
 };

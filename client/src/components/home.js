@@ -49,7 +49,7 @@ class Home extends React.Component{
       body: JSON.stringify({game_state: payload}),
     })
     .then((res) => res.json())
-    .then((data) => this.setState({ data: data.data, challengeReceived: true}));
+    .then((data) => this.setState({challenges: data.challenges, challengeReceived: true}));
   }
 
   componentDidMount() {
@@ -68,9 +68,9 @@ class Home extends React.Component{
       console.log(this.state);
       challenges = 
       <Sidebar className="sidebar" pose={isOpen ? 'open' : 'closed'}>
-        <Item className="item">{this.state.data.kills}</Item>
-        <Item className="item">{this.state.data.players}</Item>
-        <Item className="item">{this.state.data.time}</Item>
+        <Item className="item">{this.state.challenges[0]}</Item>
+        <Item className="item">{this.state.challenges[1]}</Item>
+        <Item className="item">{this.state.challenges[2]}</Item>
       </Sidebar>
       }
     return <div style={{display: 'flex', justifyContent: 'center'}}>
