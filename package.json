@@ -18,7 +18,7 @@
     "ui": "^0.2.4"
   },
   "scripts": {
-    "client": "parcel client/public/index.html --https",
+    "client": "parcel client/public/index.html",
     "server": "node server/server.js"
   },
   "devDependencies": {
