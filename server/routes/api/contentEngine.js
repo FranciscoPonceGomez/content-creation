@@ -24,8 +24,8 @@ let elimination = {
     "options": [
         [time],
         [time, count],
-        [count],
-        [spicy_end, time, count]
+        [count]
+        // [spicy_end, time, count]
     ]
 };
 
@@ -41,8 +41,8 @@ let position = {
     "type": "posisition",
     "text": position_intro,
     "options": [
-        [filler],
-        [spicy_end, filler]
+        [filler]
+        // [spicy_end, filler]
     ]
 };
 

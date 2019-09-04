@@ -31,11 +31,11 @@ body {
     color: white;
   }
   .item:nth-child(1) {
-    background: #0000ff;
+    background: #83ae9b;
   }
   
   .item:nth-child(2) {
-    background: #83ae9b;
+    background: #0000ff;
   }
   
   .item:nth-child(3) {

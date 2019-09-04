@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import backgroundGif from "../img/fortnite.mp4";
+import backgroundGif from "../img/tfue.mp4";
 import {StyledButton, ButtonGroup, StyledButtonSecondary} from './ui/button';
 import posed from 'react-pose';
 import './styles.css';
@@ -69,8 +69,6 @@ class Home extends React.Component{
       challenges = 
       <Sidebar className="sidebar" pose={isOpen ? 'open' : 'closed'}>
         <Item className="item">{this.state.challenges[0]}</Item>
-        <Item className="item">{this.state.challenges[1]}</Item>
-        <Item className="item">{this.state.challenges[2]}</Item>
       </Sidebar>
       }
     return <div style={{display: 'flex', justifyContent: 'center'}}>
