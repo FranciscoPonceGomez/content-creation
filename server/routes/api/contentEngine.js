@@ -14,54 +14,171 @@ const time = [numbers.map(x => 'in the next ' + x + ' minutes'), 'before the end
 const rank = ['top 50', 'top 25', 'top 10', 'top 5', 'top 3'];
 const count = [numbers.map(x => x + ' players'), numbers.map(x => x + ' times')];
 const filler = ['this game', 'this match', 'this session'];
+const stage_options = ['lobby', 'dropping', 'in_game', 'ring_closing'];
+// const basic_challenge = [elimination, position, death, survival];
+const landing_options = ['zone 1', 'zone 2', 'zone 3'];
+const landing_intro = [' is going to land in', ' is going to drop in', ' will decide to land in', ' will decide to drop in'];
 
 let cache = {}
 
 // semantic relationship
-let elimination = {
-    "type": "elimination",
-    "text": elimination_intro,
-    "options": [
-        [time],
-        [time, count],
-        [count]
-        // [spicy_end, time, count]
-    ]
-};
+const elimination = {
+        "text": elimination_intro,
+        "params": [],
+        "options": [
+            [time],
+            [time, count],
+            [count]
+            // [spicy_end, time, count]
+        ]
+    };
 
-let death = {
-    "type": "death",
-    "text": death_intro,
-    "options": [
-        [time]
-    ]
-};
+const death = {
+        "text": death_intro,
+        "params": [],
+        "options": [
+            [time]
+        ]
+    };
 
-let position = {
-    "type": "posisition",
-    "text": position_intro,
-    "options": [
-        [filler]
-        // [spicy_end, filler]
-    ]
-};
+const position = {
+        "text": position_intro,
+        "params": [],
+        "options": [
+            [filler]
+            // [spicy_end, filler]
+        ]
+    };
 
-let survival = {
-    "type": "survival",
-    "text": survival_intro,
-    "options": [
-        [rank],
-    ]
-};
+ const survival = {
+        "params": [],
+        "text": survival_intro,
+        "options": [
+            [rank],
+        ]
+    };
 
-let start = {
-    "text": start_intro,
-    "options": [
-        [elimination],
-        [death],
-        [survival],
-        [position]
-    ]
+// const start = {
+//         "text": start_intro,
+//         "params": [],
+//         "options": [
+//             [elimination],
+//             [position],
+//             [death],
+//             [survival]
+//         ] 
+//     };
+
+
+
+const landing_zone = {
+        "text": landing_intro,
+        "params": [],
+        "options": [landing_options]
+    };
+
+const lobby = {
+        "text": "",
+        "params": [],
+        "options": [
+            [elimination],
+            [position],
+            [death],
+            [survival]
+        ]
+    };
+
+const dropping = {
+        "text": "",
+        "params": [],
+        "options": [
+            [landing_zone],
+            [elimination],
+            [position],
+            [death],
+            [survival]
+        ]
+    };
+
+const incremental = {
+        "text": "",
+        "params": [],
+        "options": [
+
+        ]
+    };
+
+const situational = {
+        "text": "",
+        "params": [],
+        "options": [
+
+        ]
+    };
+
+const behavioral = {
+        "text": "",
+        "params": [],
+        "options": [
+
+        ]
+    };
+
+const tactical = {
+        "text": "",
+        "params": [],
+        "options": [
+
+        ]
+    };
+    
+const ring_closing = {
+        "text": "",
+        "params": [],
+        "options": [
+
+        ]
+    };
+
+const last_ring = {
+        "text": "",
+        "params": [],
+        "options": [
+
+        ]
+    };
+
+const in_game = {
+        "text": "",
+        "params": [],
+        "options": [
+           [incremental],
+           [situational],
+           [tactical],
+           [behavioral]
+       ] 
+    };
+
+const game_stage = {
+        "text": "",
+        "params": [],
+        "options": [
+            // [in_game],
+            [dropping],
+            [lobby]
+            // [ring_closing],
+            // [last_ring]
+        ]
+    };
+    
+const start = {
+        "text": start_intro,
+        "params": [],
+        "options": [game_stage]
+    };
+
+function selector(params) {
+
 }
 
 let randomizer = function(list_items) {
@@ -74,45 +191,49 @@ function isDict(v) {
 
 // let challenge_options = [start];
 async function challengeSelector(state) {
-    let conversation_pipeline = [];
-    console.log(cache);
-    if (Object.keys(cache).length == 0) {
-        cache["kills"] = state.kills;
-        cache["players"] = state.players; 
-        cache["time"] = state.time;
-        conversation_pipeline.push(start_intro);
-        conversation_pipeline.push(position);
-        console.log(cache);
-    }
-    else {
-        if (state.kills - cache["kills"] > 0) {
-            conversation_pipeline.push(start_intro);
-            conversation_pipeline.push(elimination);
-            cache["kills"] = state.kills;
-        }
-        if (cache["players"] - state.players > 0) {
-            conversation_pipeline.push(start_intro);
-            conversation_pipeline.push(randomizer([death, position, survival]));
-            cache["players"] = state.players;
-        }
-        // if (state.players - cache.get("players") > 0) {
-        //     conversation_pipeline.push(survival);
-        //     cache["time"] = state.time;
-        // }
-    }
-
-    // const NGrams = natural.NGrams;
-    // NGrams.trigrams(['some',  'other', 'words',  'here'])
-
+    let conversation_pipeline = [start];
+    console.log(conversation_pipeline);
+    // console.log(cache);
+    // if (Object.keys(cache).length == 0) {
+    //     cache["kills"] = state.kills;
+    //     cache["players"] = state.players; 
+    //     cache["time"] = state.time;
+    //     conversation_pipeline.push(start_intro);
+    //     conversation_pipeline.push(position);
+    //     console.log(cache);
+    // }
+    // else {
+    //     if (state.kills - cache["kills"] > 0) {
+    //         conversation_pipeline.push(start_intro);
+    //         conversation_pipeline.push(elimination);
+    //         cache["kills"] = state.kills;
+    //     }
+    //     if (cache["players"] - state.players > 0) {
+    //         conversation_pipeline.push(start_intro);
+    //         conversation_pipeline.push(randomizer([death, position, survival]));
+    //         cache["players"] = state.players;
+    //     }
+    //     // if (state.players - cache.get("players") > 0) {
+    //     //     conversation_pipeline.push(survival);
+    //     //     cache["time"] = state.time;
+    //     // }
+    // }
 
     let res = "";
     while(conversation_pipeline.length > 0) {
         el = conversation_pipeline.shift();  // remove first element
         if(isDict(el)) {
             res = res + " " + randomizer(el.text);
+            console.log(`options: ${el.options}`);
             candidate = randomizer(el.options);
-            for(e of candidate) {
-                conversation_pipeline.unshift(e);  // add to the end of the array
+            console.log(`length: ${el.options.length}`);
+            if(candidate.length > 1) {
+                for(e of candidate) {
+                    conversation_pipeline.unshift(e);  // add to the end of the array
+                }
+            }
+            else {
+                conversation_pipeline.unshift(candidate);
             }
         }
         else if(typeof el === 'string' || el instanceof String) {
