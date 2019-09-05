@@ -133,13 +133,6 @@ module.exports = (app) => {
         data = data.game_state;
         let challenges = [];
         challenges[0] = await challengeSelector(data);
-        // challenges.push(await challengeSelector(data));
-        // challenges.push(await challengeSelector(data));
-        // challenges.push(await challengeSelector(data));
-        console.log(challenges);
-        // for (let name of data.keys()) {
-        //     console.log(name);
-        // }
         console.log(data)
         console.log('Sucess');
         res.send({response: 'sucess', challenges: challenges});
