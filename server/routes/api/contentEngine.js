@@ -225,7 +225,9 @@ async function challengeSelector(state) {
     while(conversation_pipeline.length > 0) {
         el = conversation_pipeline.shift();  // remove first element
         if(isDict(el)) {
-            res = res + " " + randomizer(el.text);
+            if(el.text.length > 0) {
+                res = res + " " + randomizer(el.text);
+            }
             console.log(`options: ${el.options}`);
             candidate = randomizer(el.options);
             console.log(`length: ${el.options.length}`);

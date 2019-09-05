@@ -68,7 +68,9 @@ class Home extends React.Component{
       console.log(this.state);
       challenges = 
       <Sidebar className="sidebar" pose={isOpen ? 'open' : 'closed'}>
-        <Item className="item">{this.state.challenges[0]}</Item>
+        <Item className="item">
+          {this.state.challenges[0]}
+        </Item>
       </Sidebar>
       }
     return <div style={{display: 'flex', justifyContent: 'center'}}>
