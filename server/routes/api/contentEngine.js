@@ -74,7 +74,9 @@ const position = {
 const landing_zone = {
         "text": landing_intro,
         "params": [],
-        "options": [landing_options]
+        "options": [
+            [landing_options]
+        ]
     };
 
 const lobby = {
@@ -92,11 +94,11 @@ const dropping = {
         "text": "",
         "params": [],
         "options": [
-            [landing_zone],
-            [elimination],
-            [position],
-            [death],
-            [survival]
+            [landing_zone]
+            // [elimination],
+            // [position],
+            // [death],
+            // [survival]
         ]
     };
 
