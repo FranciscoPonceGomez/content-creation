@@ -1,6 +1,3 @@
-const spacyNLP = require("spacy-nlp");
-const natural = require('natural')
-
 // vocabulary
 const spicy_start = ['Besides all the effort', 'Wow that was crazy! Do you think', 'Did it again!', 'She is really good!'];
 const spicy_end = ['and walk away', 'to consolidate his dominance', 'and call it a day', 'because he is up to no good'];
@@ -8,7 +5,7 @@ const elimination_intro = ['will eliminate', 'will rekt', 'will dominate', 'will
 const death_intro = ['will be eliminated', 'will get rekt', 'will be blasted', 'will be killed'];
 const position_intro = ['will win', 'will lose', 'will get a victory royale'];
 const survival_intro = ['will make it to', 'will survive to', 'will place'];
-const start_intro = ['Streamer X', 'Ninja', 'Shroud'];
+const start_intro = ['Ovilee', 'Ninja', 'Shroud', 'Tfue', 'Jake', 'XbestX'];
 const numbers = [2,3,4,5,6,7,8,9];
 const time = [numbers.map(x => 'in the next ' + x + ' minutes'), 'before the end of game'];
 const rank = ['top 50', 'top 25', 'top 10', 'top 5', 'top 3'];
@@ -27,7 +24,7 @@ let cache = {}
 // semantic relationship
 const elimination = {
         "text": elimination_intro,
-        "params": [],
+        "features": [],
         "options": [
             [time],
             [time, count],
@@ -38,7 +35,7 @@ const elimination = {
 
 const death = {
         "text": death_intro,
-        "params": [],
+        "features": [],
         "options": [
             [time]
         ]
@@ -46,7 +43,7 @@ const death = {
 
 const position = {
         "text": position_intro,
-        "params": [],
+        "features": [],
         "options": [
             [filler]
             // [spicy_end, filler]
@@ -54,7 +51,7 @@ const position = {
     };
 
  const survival = {
-        "params": [],
+        "features": [],
         "text": survival_intro,
         "options": [
             [rank],
@@ -63,7 +60,7 @@ const position = {
 
 // const start = {
 //         "text": start_intro,
-//         "params": [],
+//         "features": [],
 //         "options": [
 //             [elimination],
 //             [position],
@@ -76,7 +73,7 @@ const position = {
 
 const landing_zone = {
         "text": landing_intro,
-        "params": [],
+        "features": [],
         "options": [
             [landing_options]
         ]
@@ -84,18 +81,18 @@ const landing_zone = {
 
 const lobby = {
         "text": "",
-        "params": [],
+        "features": [],
         "options": [
-            [elimination],
+            // [elimination],
             [position],
-            [death],
-            [survival]
+            // [death],
+            // [survival]
         ]
     };
 
 const dropping = {
         "text": "",
-        "params": [],
+        "features": [],
         "options": [
             [landing_zone]
             // [elimination],
@@ -107,7 +104,7 @@ const dropping = {
 
 const incremental = {
         "text": "",
-        "params": [],
+        "features": [],
         "options": [
 
         ]
@@ -115,7 +112,7 @@ const incremental = {
 
 const situational = {
         "text": "",
-        "params": [],
+        "features": [],
         "options": [
 
         ]
@@ -123,7 +120,7 @@ const situational = {
 
 const behavioral = {
         "text": "",
-        "params": [],
+        "features": [],
         "options": [
 
         ]
@@ -131,7 +128,7 @@ const behavioral = {
 
 const tactical = {
         "text": "",
-        "params": [],
+        "features": [],
         "options": [
 
         ]
@@ -139,7 +136,7 @@ const tactical = {
     
 const ring_closing = {
         "text": "",
-        "params": [],
+        "features": [],
         "options": [
 
         ]
@@ -147,15 +144,55 @@ const ring_closing = {
 
 const last_ring = {
         "text": "",
-        "params": [],
+        "features": [],
         "options": [
 
         ]
     };
 
+// const in_game = {
+//         "text": "",
+//         "features": {
+//             "kills": {
+//                 "weight": 0.9,
+//                 "threshold": "1+",
+//             },
+//             "players": {
+//                 "weight": 0.8,
+//                 "threshold": "<"
+//             },
+//             "ring_time": {
+//                 "weight": 0.5,
+//                 "threshold": "<1:00"
+//             }
+//         },
+//         "options": [
+//            [incremental],
+//            [situational],
+//            [tactical],
+//            [behavioral]
+//        ] 
+//     };
+
 const in_game = {
         "text": "",
-        "params": [],
+        "features": {
+            "kills": {
+                "weight": 0.9,
+                "threshold": "+=1",
+                "option": 0
+            },
+            "players": {
+                "weight": 0.8,
+                "threshold": "<=5",
+                "option": 0
+            },
+            "ring_time": {
+                "weight": 0.5,
+                "threshold": "<1:00",
+                "option": 1,
+            }
+        },
         "options": [
            [incremental],
            [situational],
@@ -166,9 +203,9 @@ const in_game = {
 
 const game_stage = {
         "text": "",
-        "params": [],
+        "features": [],
         "options": [
-            // [in_game],
+            [in_game],
             [dropping],
             [lobby]
             // [ring_closing],
@@ -178,12 +215,22 @@ const game_stage = {
     
 const start = {
         "text": start_intro,
-        "params": [],
+        "features": [],
         "options": [game_stage]
     };
 
-function selector(params) {
-
+function branchSelector(node, game_state) {
+    let candidate_index;
+    let output = [];
+    for(const [key, val] of Object.entries(node.features)) {
+        let evaluation = `${game_state[key]} ${val.threshold}`;
+        if(eval(evaluation)) {
+            // add weight to output likeliness
+            output[val.option] = Math.floor((output[val.option] + val.weight) / output.length
+        }
+    }
+    // return node.options[candidate_index];
+    return output.indexOf(Math.max(...output));
 }
 
 let randomizer = function(list_items) {
@@ -232,7 +279,8 @@ async function challengeSelector(state) {
                 res = res + " " + randomizer(el.text);
             }
             console.log(`options: ${el.options}`);
-            candidate = randomizer(el.options);
+            // candidate = randomizer(el.options);
+            candidate = branchSelector(el, state)
             console.log(`length: ${el.options.length}`);
             if(candidate.length > 1) {
                 for(e of candidate) {
