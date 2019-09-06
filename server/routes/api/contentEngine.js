@@ -16,8 +16,11 @@ const count = [numbers.map(x => x + ' players'), numbers.map(x => x + ' times')]
 const filler = ['this game', 'this match', 'this session'];
 const stage_options = ['lobby', 'dropping', 'in_game', 'ring_closing'];
 // const basic_challenge = [elimination, position, death, survival];
-const landing_options = ['zone 1', 'zone 2', 'zone 3'];
-const landing_intro = [' is going to land in', ' is going to drop in', ' will decide to land in', ' will decide to drop in'];
+const landing_options = ['Junk Junction', 'Haunted hills', 'Pleasent Park', 'The Block', 'Lazy Lagoon'
+, 'Loot Lake', 'Neo Tilted', 'Snobby Shores', 'Shifty Shafts', 'Frosty Flights', 'Polar Peak', 'Happy Hamlet'
+, 'Sunny Steps', 'Pressure Plant', 'Dusty Depot', 'Salty Springs', 'Fatal Fields', 'Mega Mall', 'Lonely Lodge'
+, 'Paradise Palms', 'Lucky Landing'];
+const landing_intro = [' is going to land in', ' is going to drop in', ' will decide to land in', ' will decide to drop in', 'is thinking to land in', 'is thinking to drop in'];
 
 let cache = {}
 
