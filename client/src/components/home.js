@@ -135,7 +135,7 @@ class Home extends React.Component{
 	            <input type='text' placeholder='Players' name='players' defaultValue='100'/>
               <p>Time</p>
 	            <input type='text' placeholder='time' name='time' defaultValue='15:00'/>
-              {/* <Timer></Timer> */}
+              <Timer></Timer>
 	            <StyledButton>Send data</StyledButton>
 	          </form>
          </div>
