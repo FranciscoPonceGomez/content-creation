@@ -27,12 +27,21 @@ class Home extends React.Component{
     this.state = {isOpen: false};
     console.log(this.state);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.generateGameState = this.generateGameState.bind(this);
+    this.viaForm = false;
   }
 
   handleSubmit(event) {
+    let data;
+    let payload = {};
     event.preventDefault();
-    const data = new FormData(event.target);
-    let payload = {}
+
+    if(this.viaForm) {
+      data = new FormData(event.target);
+    }
+    else {
+      data = this.generateGameState(this.state);
+    }
 
     for (let name of data.keys()) {
       if (name !== 'undefined') {
@@ -58,6 +67,24 @@ class Home extends React.Component{
 
   toggle() {
     this.setState({ isOpen: !this.state.isOpen });
+  }
+
+  generateGameState(state) {
+    // seconds = this.props.seconds;
+    console.log(state);
+    switch(state) {
+      case 800:
+        break;
+      case 700:
+        break;
+      default:
+        return {
+          "time": state.seconds,
+          "kills": 20,
+          "players": 80,
+          "vehicle": false,
+        }
+    }
   }
 
   render() {
@@ -135,7 +162,7 @@ class Home extends React.Component{
 	            <input type='text' placeholder='Players' name='players' defaultValue='100'/>
               <p>Time</p>
 	            <input type='text' placeholder='time' name='time' defaultValue='15:00'/>
-              <Timer></Timer>
+              <Timer sendSeconds={this.generateGameState}></Timer>
 	            <StyledButton>Send data</StyledButton>
 	          </form>
          </div>

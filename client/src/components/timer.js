@@ -54,11 +54,13 @@ class Timer extends React.Component {
     }
   
     render() {
+      this.props.sendSeconds(this.state.seconds);
       return(
         <div>
           {/* <StyledButton onClick={this.startTimer}>Clock</StyledButton> */}
           <div>
             m: {this.state.time.m} s: {this.state.time.s}
+            {/* {this.props.sendSeconds(this.state.seconds)} */}
           </div>
         </div>
       );

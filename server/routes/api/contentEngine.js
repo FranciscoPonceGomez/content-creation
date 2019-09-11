@@ -179,17 +179,17 @@ const in_game = {
         "features": {
             "kills": {
                 "weight": 0.9,
-                "threshold": "+=1",
+                "threshold": function (a, b) { return a > b; },
                 "option": 0
             },
             "players": {
                 "weight": 0.8,
-                "threshold": "<=5",
+                "threshold": "Inc",
                 "option": 0
             },
             "ring_time": {
                 "weight": 0.5,
-                "threshold": "<1:00",
+                "threshold": "truye",
                 "option": 1,
             }
         },
@@ -226,7 +226,7 @@ function branchSelector(node, game_state) {
         let evaluation = `${game_state[key]} ${val.threshold}`;
         if(eval(evaluation)) {
             // add weight to output likeliness
-            output[val.option] = Math.floor((output[val.option] + val.weight) / output.length
+            // output[val.option] = Math.floor((output[val.option] + val.weight) / output.length
         }
     }
     // return node.options[candidate_index];
@@ -279,8 +279,8 @@ async function challengeSelector(state) {
                 res = res + " " + randomizer(el.text);
             }
             console.log(`options: ${el.options}`);
-            // candidate = randomizer(el.options);
-            candidate = branchSelector(el, state)
+            candidate = randomizer(el.options);
+            // candidate = branchSelector(el, state)
             console.log(`length: ${el.options.length}`);
             if(candidate.length > 1) {
                 for(e of candidate) {
