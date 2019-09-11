@@ -19,7 +19,7 @@ const landing_options = ['Junk Junction', 'Haunted hills', 'Pleasent Park', 'The
 , 'Paradise Palms', 'Lucky Landing'];
 const landing_intro = [' is going to land in', ' is going to drop in', ' will decide to land in', ' will decide to drop in', 'is thinking to land in', 'is thinking to drop in'];
 
-let cache = {}
+let cache = [];
 
 // semantic relationship
 const elimination = {
@@ -150,29 +150,6 @@ const last_ring = {
         ]
     };
 
-// const in_game = {
-//         "text": "",
-//         "features": {
-//             "kills": {
-//                 "weight": 0.9,
-//                 "threshold": "1+",
-//             },
-//             "players": {
-//                 "weight": 0.8,
-//                 "threshold": "<"
-//             },
-//             "ring_time": {
-//                 "weight": 0.5,
-//                 "threshold": "<1:00"
-//             }
-//         },
-//         "options": [
-//            [incremental],
-//            [situational],
-//            [tactical],
-//            [behavioral]
-//        ] 
-//     };
 
 const in_game = {
         "text": "",
@@ -187,9 +164,9 @@ const in_game = {
                 "threshold": "Inc",
                 "option": 0
             },
-            "ring_time": {
+            "vehicle": {
                 "weight": 0.5,
-                "threshold": "truye",
+                "threshold": true,
                 "option": 1,
             }
         },
@@ -219,17 +196,36 @@ const start = {
         "options": [game_stage]
     };
 
+function hasChanged(feature, game_state, op) {
+    if(cache.length === 0) {
+        cache.push(game_state);
+        return true;
+    }
+    let res;
+    switch(op) {
+        case "Inc": 
+            res = Math.abs(game_state[feature] - cache[feature]) > 0;
+        default:
+            res = game_state[feature] === op;
+    }
+    cache.push(game_state);
+    return res;
+}
+
+/*
+    Finds the best brach option to go next based on feature weights and threshold satisfaction
+*/
 function branchSelector(node, game_state) {
-    let candidate_index;
     let output = [];
     for(const [key, val] of Object.entries(node.features)) {
-        let evaluation = `${game_state[key]} ${val.threshold}`;
-        if(eval(evaluation)) {
+        //let evaluation = `${game_state[key]} ${val.threshold}`;
+        //if(eval(evaluation)) {
             // add weight to output likeliness
-            // output[val.option] = Math.floor((output[val.option] + val.weight) / output.length
-        }
+            //output[val.option] = Math.floor((output[val.option] + val.weight) / output.length
+            if(has_changed(game_state[key]), game_state, op) {
+                output[val.option] = Math.floor((output[val.option] + val.weight) / output.length);
+            }
     }
-    // return node.options[candidate_index];
     return output.indexOf(Math.max(...output));
 }
 
@@ -243,35 +239,10 @@ function isDict(v) {
 
 // let challenge_options = [start];
 async function challengeSelector(state) {
+    let res = "";
     let conversation_pipeline = [start];
     console.log(conversation_pipeline);
-    // console.log(cache);
-    // if (Object.keys(cache).length == 0) {
-    //     cache["kills"] = state.kills;
-    //     cache["players"] = state.players; 
-    //     cache["time"] = state.time;
-    //     conversation_pipeline.push(start_intro);
-    //     conversation_pipeline.push(position);
-    //     console.log(cache);
-    // }
-    // else {
-    //     if (state.kills - cache["kills"] > 0) {
-    //         conversation_pipeline.push(start_intro);
-    //         conversation_pipeline.push(elimination);
-    //         cache["kills"] = state.kills;
-    //     }
-    //     if (cache["players"] - state.players > 0) {
-    //         conversation_pipeline.push(start_intro);
-    //         conversation_pipeline.push(randomizer([death, position, survival]));
-    //         cache["players"] = state.players;
-    //     }
-    //     // if (state.players - cache.get("players") > 0) {
-    //     //     conversation_pipeline.push(survival);
-    //     //     cache["time"] = state.time;
-    //     // }
-    // }
 
-    let res = "";
     while(conversation_pipeline.length > 0) {
         el = conversation_pipeline.shift();  // remove first element
         if(isDict(el)) {
