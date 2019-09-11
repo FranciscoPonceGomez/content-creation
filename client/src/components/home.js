@@ -25,7 +25,7 @@ class Home extends React.Component{
   constructor() {
     super();
     this.state = {isOpen: false};
-    console.log(this.state);
+    // console.log(this.state);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.generateGameState = this.generateGameState.bind(this);
     this.viaForm = false;
@@ -43,6 +43,7 @@ class Home extends React.Component{
       data = this.generateGameState(this.state);
     }
 
+    console.log(data);
     for (let name of data.keys()) {
       if (name !== 'undefined') {
         payload[name] = data.get(name);
@@ -69,28 +70,50 @@ class Home extends React.Component{
     this.setState({ isOpen: !this.state.isOpen });
   }
 
+  sendData(data) {
+    console.log(data);
+    let payload = {};
+    // for (let name of data.keys()) {
+    //   if (name !== 'undefined') {
+    //     payload[name] = data.get(name);
+    //   }
+    // }
+
+    fetch('http://localhost:5000/predict', {
+      method: 'POST',
+      mode: 'cors',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({game_state: payload}),
+    })
+    .then((res) => res.json())
+    .then((data) => this.setState({challenges: data.challenges, challengeReceived: true}));
+  }
+
   generateGameState(state) {
     // seconds = this.props.seconds;
     console.log(state);
+    // this.sendData(state);
     switch(state) {
       case 800:
         break;
       case 700:
         break;
       default:
-        return {
+          this.sendData({
           "time": state.seconds,
           "kills": 20,
           "players": 80,
           "vehicle": false,
-        }
+          })
     }
   }
 
   render() {
     const { isOpen } = this.state;
     let challenges;
-    console.log(this.state);
+    // console.log(this.state);
     if (this.state.challengeReceived) {
       console.log(this.state);
       challenges = 
