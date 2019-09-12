@@ -21,7 +21,7 @@ const landing_options = ['Junk Junction', 'Haunted hills', 'Pleasent Park', 'The
 , 'Paradise Palms', 'Lucky Landing'];
 const landing_intro = [' is going to land in', ' is going to drop in', ' will decide to land in', ' will decide to drop in', 'is thinking on landing in', 'is thinking on dropping in'];
 const vehicle_intro = [' got his hands on a mech. Do you think he', ' got inside a metal beast. Do you think he', ' is playing with power, engineering power. Do you think he'];
-const eye_storm_intro = ['is killing it, but the storm eye is shrinking. Will he take any damage from it'];
+const eye_storm_intro = ['is killing it, but the storm eye is approaching. Will he take any damage from it'];
 
 let cache = {};
 
@@ -268,9 +268,8 @@ function branchSelector(node, state) {
         // console.log(val);
         console.log(state[key]);
         console.log(cache[key]);
-        console.log(val.threshold)
+        // console.log(val.threshold)
         if(val.threshold(state[key], cache[key])) {
-            console.log("Im inside");
             console.log((output[val.option] + val.weight));
             output[val.option] = output[val.option] + val.weight;
             console.log(output);
@@ -306,7 +305,7 @@ async function challengeSelector(state) {
             candidate = branchSelector(el, state)
             // console.log(`length: ${el.options.length}`);
             console.log(`candidate: ${candidate}`);
-            console.log(candidate);
+            // console.log(candidate);
             if(candidate.length > 1) {
                 for(e of candidate) {
                     conversation_pipeline.unshift(e);  // add to the end of the array
