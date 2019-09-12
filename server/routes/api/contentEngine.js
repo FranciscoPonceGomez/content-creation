@@ -21,7 +21,7 @@ const landing_options = ['Junk Junction', 'Haunted hills', 'Pleasent Park', 'The
 const landing_intro = [' is going to land in', ' is going to drop in', ' will decide to land in', ' will decide to drop in', 'is thinking to land in', 'is thinking to drop in'];
 const vehicle_intro = [' got his hands on a mech. Do you think ', ' got inside a metal beast. ', ' is playing with power, engineering power. '];
 
-let cache = [];
+let cache = {};
 
 // semantic relationship
 const elimination = {
@@ -106,9 +106,21 @@ const dropping = {
 
 const incremental = {
         "text": "",
-        "features": [],
+        "features": {
+            "kills": {
+                "weight": 0.5,
+                "threshold": function (a, b) { return a > b; },
+                "option": 0
+            },
+            "players": {
+                "weight": 0.5,
+                "threshold": function (a, b) { return a < b; },
+                "option": 1
+            }
+        },
         "options": [
-
+            elimination,
+            death
         ]
     };
 
@@ -173,7 +185,7 @@ const in_game = {
             "players": {
                 "weight": 0.2,
                 "threshold": function (a, b) { return a < b; },
-                "option": 0
+                "option": 2
             },
             "vehicle": {
                 "weight": 0.9,
@@ -182,11 +194,11 @@ const in_game = {
             }
         },
         "options": [
-           [incremental],
-           [situational],
-           [tactical],
-           [behavioral],
-           [vehicle]
+           incremental,
+           situational,
+           tactical,
+           behavioral,
+           vehicle
        ] 
     };
 
@@ -214,41 +226,51 @@ const in_game = {
 //         "options": [game_stage]
 //     };
 
-function hasChanged(feature, game_state, op) {
-    if(cache.length === 0) {
-        cache.push(game_state);
-        return true;
-    }
-    let res;
-    switch(op) {
-        case "Inc": 
-            res = Math.abs(game_state[feature] - cache[feature]) > 0;
-        default:
-            res = game_state[feature] === op;
-    }
-    cache.push(game_state);
-    return res;
+function isFunction(functionToCheck) {
+    return functionToCheck && {}.toString.call(functionToCheck) === '[object Function]';
 }
+
+// function hasChanged(feature, game_state, op) {
+//     if(cache.length === 0) {
+//         cache.push(game_state);
+//         return true;
+//     }
+//     let res;
+//     switch(op) {
+//         case "Inc": 
+//             res = Math.abs(game_state[feature] - cache[feature]) > 0;
+//         default:
+//             res = game_state[feature] === op;
+//     }
+//     cache.push(game_state);
+//     return res;
+// }
 
 /*
     Finds the best brach option to go next based on feature weights and threshold satisfaction
 */
 function branchSelector(node, state) {
-    let output = node.options;
     console.log(node.features);
     if(node.features.length == 0) {
-        return output[0];
+        cache = state;
+        return node.options[0];
     }
+    let output = new Array(node.options.length).fill(0);
+
     for(const [key, val] of Object.entries(node.features)) {
-        // if(has_changed(game_state[key]), game_state, op) {
-        console.log(key);
-        console.log(val);
-        console.log(val.threshold);
-        if(val.threshold) {
+        // console.log("Im inside the loop");
+        // console.log(key);
+        // console.log(val);
+        console.log(state[key]);
+        console.log(cache[key]);
+        if(val.threshold || (this.isFunction(val.threshold) && val.threshold(state[key], cache[key]))) {
+            console.log("Im inside");
             output[val.option] = Math.floor((output[val.option] + val.weight) / output.length);
+            console.log(output);
+            state[key] = cache[key];
         }
     }
-    return output.indexOf(Math.max(...output));
+    return node.options[output.indexOf(Math.max(...output))];
 }
 
 let randomizer = function(list_items) {
@@ -275,8 +297,9 @@ async function challengeSelector(state) {
             }
             // candidate = randomizer(el.options);
             candidate = branchSelector(el, state)
-            console.log(`length: ${el.options.length}`);
+            // console.log(`length: ${el.options.length}`);
             console.log(`candidate: ${candidate}`);
+            console.log(candidate);
             if(candidate.length > 1) {
                 for(e of candidate) {
                     conversation_pipeline.unshift(e);  // add to the end of the array
