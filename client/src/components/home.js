@@ -104,13 +104,14 @@ class Home extends React.Component{
     console.log(seconds);
     // this.sendData(state);
     switch(seconds) {
-      case 895:
+      case 898:
           this.sendData({
           "time": seconds,
           "kills": 0,
           "players": 100,
           "vehicle": false,
-          "game_stage": "dropping"
+          "game_stage": "dropping",
+          "storm_eye": false
           })
           this.sleep(1000);
           break;
@@ -120,17 +121,19 @@ class Home extends React.Component{
           "kills": 0,
           "players": 100,
           "vehicle": false,
-          "game_stage": "in_game"
+          "game_stage": "in_game",
+          "storm_eye": false
           })
           this.sleep(1000);
         break;
-      case 850:
+      case 852:
           this.sendData({
           "time": seconds,
           "kills": 1,
           "players": 87,
           "vehicle": false,
-          "game_stage": "in_game"
+          "game_stage": "in_game",
+          "storm_eye": false
           })
           this.sleep(1000);
         break;
@@ -138,30 +141,43 @@ class Home extends React.Component{
           this.sendData({
           "time": seconds,
           "kills": 1,
-          "players":84,
+          "players":87,
           "vehicle": false,
           "game_stage": "in_game",
-          "shooting": true
+          "storm_eye": true
           })
           this.sleep(1000);
         break;
-      case 730:
+      case 760:
           this.sendData({
           "time": seconds,
           "kills": 2,
           "players": 68,
           "vehicle": false,
-          "game_stage": "in_game"
+          "game_stage": "in_game",
+          "storm_eye": false
+          })
+          this.sleep(1000);
+        break;
+      case 737:
+          this.sendData({
+          "time": seconds,
+          "kills": 3,
+          "players": 68,
+          "vehicle": false,
+          "game_stage": "in_game",
+          "storm_eye": false
           })
           this.sleep(1000);
         break;
       case 560:
           this.sendData({
-          "time": state.seconds,
-          "kills": 2,
+          "time": seconds,
+          "kills": 3,
           "players": 68,
           "vehicle": true,
-          "game_stage": "in_game"
+          "game_stage": "in_game",
+          "storm_eye": false
           })
           this.sleep(1000);
         break;
