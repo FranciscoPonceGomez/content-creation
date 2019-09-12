@@ -5,7 +5,8 @@ const elimination_intro = ['will eliminate', 'will rekt', 'will dominate', 'will
 const death_intro = ['will be eliminated', 'will get rekt', 'will be blasted', 'will be killed'];
 const position_intro = ['will win', 'will lose', 'will get a victory royale'];
 const survival_intro = ['will make it to', 'will survive to', 'will place'];
-const start_intro = ['Ovilee', 'Ninja', 'Shroud', 'Tfue', 'Jake', 'XbestX'];
+// const start_intro = ['Ovilee', 'Ninja', 'Shroud', 'Tfue', 'Jake', 'XbestX'];
+const start_intro = ['Tfue'];
 const numbers = [2,3,4,5,6,7,8,9];
 const time = [numbers.map(x => 'in the next ' + x + ' minutes'), 'before the end of game'];
 const rank = ['top 50', 'top 25', 'top 10', 'top 5', 'top 3'];
@@ -18,6 +19,7 @@ const landing_options = ['Junk Junction', 'Haunted hills', 'Pleasent Park', 'The
 , 'Sunny Steps', 'Pressure Plant', 'Dusty Depot', 'Salty Springs', 'Fatal Fields', 'Mega Mall', 'Lonely Lodge'
 , 'Paradise Palms', 'Lucky Landing'];
 const landing_intro = [' is going to land in', ' is going to drop in', ' will decide to land in', ' will decide to drop in', 'is thinking to land in', 'is thinking to drop in'];
+const vehicle_intro = [' got his hands on a mech. Do you think ', ' got inside a metal beast. ', ' is playing with power, engineering power. '];
 
 let cache = [];
 
@@ -94,7 +96,7 @@ const dropping = {
         "text": "",
         "features": [],
         "options": [
-            [landing_zone]
+            [landing_zone],
             // [elimination],
             // [position],
             // [death],
@@ -109,6 +111,15 @@ const incremental = {
 
         ]
     };
+
+const vehicle = {
+    "text": vehicle_intro,
+    "features": [],
+    "options": [
+        [elimination],
+        [death]
+    ]
+}
 
 const situational = {
         "text": "",
@@ -155,46 +166,53 @@ const in_game = {
         "text": "",
         "features": {
             "kills": {
-                "weight": 0.9,
+                "weight": 0.7,
                 "threshold": function (a, b) { return a > b; },
                 "option": 0
             },
             "players": {
-                "weight": 0.8,
-                "threshold": "Inc",
+                "weight": 0.2,
+                "threshold": function (a, b) { return a < b; },
                 "option": 0
             },
             "vehicle": {
-                "weight": 0.5,
+                "weight": 0.9,
                 "threshold": true,
-                "option": 1,
+                "option": 4,
             }
         },
         "options": [
            [incremental],
            [situational],
            [tactical],
-           [behavioral]
+           [behavioral],
+           [vehicle]
        ] 
     };
 
-const game_stage = {
-        "text": "",
-        "features": [],
-        "options": [
-            [in_game],
-            [dropping],
-            [lobby]
-            // [ring_closing],
-            // [last_ring]
-        ]
-    };
+// const game_stage = {
+//         "text": "",
+//         "features": {
+//             "game_stage": {
+//                 "weight": 1,
+//                 "threshold": true,
+//                 "option": game_stage 
+//             }
+//         },
+//         "options": [
+//             [in_game],
+//             [dropping],
+//             [lobby]
+//             // [ring_closing],
+//             // [last_ring]
+//         ]
+//     };
     
-const start = {
-        "text": start_intro,
-        "features": [],
-        "options": [game_stage]
-    };
+// const start = {
+//         "text": start_intro,
+//         "features": [],
+//         "options": [game_stage]
+//     };
 
 function hasChanged(feature, game_state, op) {
     if(cache.length === 0) {
@@ -215,16 +233,20 @@ function hasChanged(feature, game_state, op) {
 /*
     Finds the best brach option to go next based on feature weights and threshold satisfaction
 */
-function branchSelector(node, game_state) {
-    let output = [];
+function branchSelector(node, state) {
+    let output = node.options;
+    console.log(node.features);
+    if(node.features.length == 0) {
+        return output[0];
+    }
     for(const [key, val] of Object.entries(node.features)) {
-        //let evaluation = `${game_state[key]} ${val.threshold}`;
-        //if(eval(evaluation)) {
-            // add weight to output likeliness
-            //output[val.option] = Math.floor((output[val.option] + val.weight) / output.length
-            if(has_changed(game_state[key]), game_state, op) {
-                output[val.option] = Math.floor((output[val.option] + val.weight) / output.length);
-            }
+        // if(has_changed(game_state[key]), game_state, op) {
+        console.log(key);
+        console.log(val);
+        console.log(val.threshold);
+        if(val.threshold) {
+            output[val.option] = Math.floor((output[val.option] + val.weight) / output.length);
+        }
     }
     return output.indexOf(Math.max(...output));
 }
@@ -239,9 +261,11 @@ function isDict(v) {
 
 // let challenge_options = [start];
 async function challengeSelector(state) {
-    let res = "";
-    let conversation_pipeline = [start];
+    let res = randomizer(start_intro);
+    let conversation_pipeline = [eval(state.game_stage)];
+    console.log(`pipeline: ${conversation_pipeline}`);
     console.log(conversation_pipeline);
+    console.log(state);
 
     while(conversation_pipeline.length > 0) {
         el = conversation_pipeline.shift();  // remove first element
@@ -249,10 +273,10 @@ async function challengeSelector(state) {
             if(el.text.length > 0) {
                 res = res + " " + randomizer(el.text);
             }
-            console.log(`options: ${el.options}`);
-            candidate = randomizer(el.options);
-            // candidate = branchSelector(el, state)
+            // candidate = randomizer(el.options);
+            candidate = branchSelector(el, state)
             console.log(`length: ${el.options.length}`);
+            console.log(`candidate: ${candidate}`);
             if(candidate.length > 1) {
                 for(e of candidate) {
                     conversation_pipeline.unshift(e);  // add to the end of the array
@@ -277,10 +301,10 @@ async function challengeSelector(state) {
 module.exports = (app) => {
     app.post('/predict', async (req, res) => {
         let data = req.body;
-        data = data.game_state;
+        state = data.game_state;
+        console.log(`state: ${state}`);
         let challenges = [];
-        challenges[0] = await challengeSelector(data);
-        console.log(data)
+        challenges[0] = await challengeSelector(state);
         console.log('Sucess');
         res.send({response: 'sucess', challenges: challenges});
     })

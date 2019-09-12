@@ -70,14 +70,22 @@ class Home extends React.Component{
     this.setState({ isOpen: !this.state.isOpen });
   }
 
+  /**
+* Delay for a number of milliseconds
+*/
+  sleep(delay) {
+    var start = new Date().getTime();
+    while (new Date().getTime() < start + delay);
+  }
+
   sendData(data) {
     console.log(data);
     let payload = {};
-    // for (let name of data.keys()) {
-    //   if (name !== 'undefined') {
-    //     payload[name] = data.get(name);
-    //   }
-    // }
+    for (let name of Object.keys(data)) {
+      if (name !== 'undefined') {
+        payload[name] = data[name];
+      }
+    }
 
     fetch('http://localhost:5000/predict', {
       method: 'POST',
@@ -91,22 +99,74 @@ class Home extends React.Component{
     .then((data) => this.setState({challenges: data.challenges, challengeReceived: true}));
   }
 
-  generateGameState(state) {
+  generateGameState(seconds) {
     // seconds = this.props.seconds;
-    console.log(state);
+    console.log(seconds);
     // this.sendData(state);
-    switch(state) {
-      case 800:
+    switch(seconds) {
+      case 895:
+          this.sendData({
+          "time": seconds,
+          "kills": 0,
+          "players": 100,
+          "vehicle": false,
+          "game_stage": "dropping"
+          })
+          this.sleep(1000);
+          break;
+      case 880:
+          this.sendData({
+          "time": seconds,
+          "kills": 0,
+          "players": 100,
+          "vehicle": false,
+          "game_stage": "in_game"
+          })
+          this.sleep(1000);
         break;
-      case 700:
+      case 850:
+          this.sendData({
+          "time": seconds,
+          "kills": 1,
+          "players": 87,
+          "vehicle": false,
+          "game_stage": "in_game"
+          })
+          this.sleep(1000);
         break;
-      default:
+      case 820:
+          this.sendData({
+          "time": seconds,
+          "kills": 1,
+          "players":84,
+          "vehicle": false,
+          "game_stage": "in_game",
+          "shooting": true
+          })
+          this.sleep(1000);
+        break;
+      case 730:
+          this.sendData({
+          "time": seconds,
+          "kills": 2,
+          "players": 68,
+          "vehicle": false,
+          "game_stage": "in_game"
+          })
+          this.sleep(1000);
+        break;
+      case 560:
           this.sendData({
           "time": state.seconds,
-          "kills": 20,
-          "players": 80,
-          "vehicle": false,
+          "kills": 2,
+          "players": 68,
+          "vehicle": true,
+          "game_stage": "in_game"
           })
+          this.sleep(1000);
+        break;
+      default:
+        break;
     }
   }
 
