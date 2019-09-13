@@ -4,7 +4,7 @@ import {StyledButton} from './ui/button';
 class Timer extends React.Component {
     constructor() {
       super();
-      this.state = { time: {}, seconds: 300 };
+      this.state = { time: {}, seconds: 900};
       this.timer = 0;
       this.startTimer = this.startTimer.bind(this);
       this.countDown = this.countDown.bind(this);
@@ -30,6 +30,7 @@ class Timer extends React.Component {
     componentDidMount() {
       let timeLeftVar = this.secondsToTime(this.state.seconds);
       this.setState({ time: timeLeftVar });
+      this.startTimer();
     }
   
     startTimer() {
@@ -53,11 +54,13 @@ class Timer extends React.Component {
     }
   
     render() {
+      this.props.sendSeconds(this.state.seconds);
       return(
         <div>
-          <StyledButton onClick={this.startTimer}>Clock</StyledButton>
+          {/* <StyledButton onClick={this.startTimer}>Clock</StyledButton> */}
           <div>
             m: {this.state.time.m} s: {this.state.time.s}
+            {/* {this.props.sendSeconds(this.state.seconds)} */}
           </div>
         </div>
       );

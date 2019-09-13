@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import backgroundGif from "../img/tfue.mp4";
+import backgroundGif from "../img/tfue2.mp4";
 import {StyledButton, ButtonGroup, StyledButtonSecondary} from './ui/button';
 import posed from 'react-pose';
 import './styles.css';
@@ -25,15 +25,25 @@ class Home extends React.Component{
   constructor() {
     super();
     this.state = {isOpen: false};
-    console.log(this.state);
+    // console.log(this.state);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.generateGameState = this.generateGameState.bind(this);
+    this.viaForm = false;
   }
 
   handleSubmit(event) {
+    let data;
+    let payload = {};
     event.preventDefault();
-    const data = new FormData(event.target);
-    let payload = {}
 
+    if(this.viaForm) {
+      data = new FormData(event.target);
+    }
+    else {
+      data = this.generateGameState(this.state);
+    }
+
+    console.log(data);
     for (let name of data.keys()) {
       if (name !== 'undefined') {
         payload[name] = data.get(name);
@@ -60,15 +70,133 @@ class Home extends React.Component{
     this.setState({ isOpen: !this.state.isOpen });
   }
 
+  /**
+* Delay for a number of milliseconds
+*/
+  sleep(delay) {
+    var start = new Date().getTime();
+    while (new Date().getTime() < start + delay);
+  }
+
+  sendData(data) {
+    console.log(data);
+    let payload = {};
+    for (let name of Object.keys(data)) {
+      if (name !== 'undefined') {
+        payload[name] = data[name];
+      }
+    }
+
+    fetch('http://localhost:5000/predict', {
+      method: 'POST',
+      mode: 'cors',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({game_state: payload}),
+    })
+    .then((res) => res.json())
+    .then((data) => this.setState({challenges: data.challenges, challengeReceived: true}));
+  }
+
+  generateGameState(seconds) {
+    // seconds = this.props.seconds;
+    console.log(seconds);
+    // this.sendData(state);
+    switch(seconds) {
+      case 898:
+          this.sendData({
+          "time": seconds,
+          "kills": 0,
+          "players": 100,
+          "vehicle": false,
+          "game_stage": "dropping",
+          "storm_eye": false
+          })
+          this.sleep(1000);
+          break;
+      case 880:
+          this.sendData({
+          "time": seconds,
+          "kills": 0,
+          "players": 100,
+          "vehicle": false,
+          "game_stage": "in_game",
+          "storm_eye": false
+          })
+          this.sleep(1000);
+        break;
+      case 852:
+          this.sendData({
+          "time": seconds,
+          "kills": 1,
+          "players": 87,
+          "vehicle": false,
+          "game_stage": "in_game",
+          "storm_eye": false
+          })
+          this.sleep(1000);
+        break;
+      case 820:
+          this.sendData({
+          "time": seconds,
+          "kills": 1,
+          "players":87,
+          "vehicle": false,
+          "game_stage": "in_game",
+          "storm_eye": true
+          })
+          this.sleep(1000);
+        break;
+      case 765:
+          this.sendData({
+          "time": seconds,
+          "kills": 2,
+          "players": 68,
+          "vehicle": false,
+          "game_stage": "in_game",
+          "storm_eye": false
+          })
+          this.sleep(1000);
+        break;
+      case 758:
+          this.sendData({
+          "time": seconds,
+          "kills": 9,
+          "players": 68,
+          "vehicle": true,
+          "game_stage": "in_game",
+          "storm_eye": false
+          })
+          this.sleep(1000);
+        break;
+      case 755:
+          this.sendData({
+          "time": seconds,
+          "kills": 10,
+          "players": 68,
+          "vehicle": false,
+          "game_stage": "in_game",
+          "storm_eye": false
+          })
+          this.sleep(1000);
+        break;
+      default:
+        break;
+    }
+  }
+
   render() {
     const { isOpen } = this.state;
     let challenges;
-    console.log(this.state);
+    // console.log(this.state);
     if (this.state.challengeReceived) {
       console.log(this.state);
       challenges = 
       <Sidebar className="sidebar" pose={isOpen ? 'open' : 'closed'}>
-        <Item className="item">{this.state.challenges[0]}</Item>
+        <Item className="item">
+          {this.state.challenges[0]}
+        </Item>
       </Sidebar>
       }
     return <div style={{display: 'flex', justifyContent: 'center'}}>
@@ -133,7 +261,7 @@ class Home extends React.Component{
 	            <input type='text' placeholder='Players' name='players' defaultValue='100'/>
               <p>Time</p>
 	            <input type='text' placeholder='time' name='time' defaultValue='15:00'/>
-              {/* <Timer></Timer> */}
+              <Timer sendSeconds={this.generateGameState}></Timer>
 	            <StyledButton>Send data</StyledButton>
 	          </form>
          </div>
