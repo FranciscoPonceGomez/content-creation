@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import backgroundGif from "../img/tfue.mp4";
+import backgroundGif from "../img/tfue2.mp4";
 import {StyledButton, ButtonGroup, StyledButtonSecondary} from './ui/button';
 import posed from 'react-pose';
 import './styles.css';
@@ -148,7 +148,7 @@ class Home extends React.Component{
           })
           this.sleep(1000);
         break;
-      case 760:
+      case 765:
           this.sendData({
           "time": seconds,
           "kills": 2,
@@ -159,23 +159,23 @@ class Home extends React.Component{
           })
           this.sleep(1000);
         break;
-      case 737:
+      case 758:
           this.sendData({
           "time": seconds,
-          "kills": 3,
+          "kills": 9,
           "players": 68,
-          "vehicle": false,
+          "vehicle": true,
           "game_stage": "in_game",
           "storm_eye": false
           })
           this.sleep(1000);
         break;
-      case 560:
+      case 755:
           this.sendData({
           "time": seconds,
-          "kills": 3,
+          "kills": 10,
           "players": 68,
-          "vehicle": true,
+          "vehicle": false,
           "game_stage": "in_game",
           "storm_eye": false
           })

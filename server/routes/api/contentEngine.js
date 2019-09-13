@@ -1,7 +1,7 @@
 // vocabulary
 const spicy_start = ['Besides all the effort', 'Wow that was crazy! Do you think', 'Did it again!', 'She is really good!'];
 const spicy_end = ['and walk away', 'to consolidate his dominance', 'and call it a day', 'because he is up to no good'];
-const elimination_intro = ['just likes death! Will he eliminate again', 'made that guy byte the dust! Will he rekt again', 'is owning the competition! Will he own again', 'just showed that guy who is boss. Will he destroy again', 'is poppin! Will he get a kill again'];
+const elimination_intro = ['just likes the killing! Will he eliminate again', 'made that guy byte the dust! Will he rekt again', 'is owning the competition! Will he own again', 'just showed that guy who is boss. Will he destroy again'];
 const death_intro = ['will be eliminated', 'will get rekt', 'will be blasted', 'will be killed'];
 const stats_info = ['has a kill/death ratio of 1.94 '];
 const position_intro = ['Will he win', 'Will he lose', 'Will he get a victory royale'].map(x => stats_info + x);
@@ -9,7 +9,7 @@ const survival_intro = ['will make it to', 'will survive to', 'will place'];
 // const start_intro = ['Ovilee', 'Ninja', 'Shroud', 'Tfue', 'Jake', 'XbestX'];
 const start_intro = ['Tfue'];
 const numbers = [2,3,4,5];
-const time = [numbers.map(x => 'in the next ' + x + ' minutes?'), 'before the end of game?'];
+const time = [numbers.map(x => 'in the next ' + x + ' minutes?')];//, 'before the end of game?'];
 const rank = ['top 50', 'top 25', 'top 10', 'top 5', 'top 3'];
 const count = [numbers.map(x => x + ' players'), numbers.map(x => x + ' times')];
 const filler = ['this game?', 'this match?', 'this session?'];
@@ -21,7 +21,7 @@ const landing_options = ['Junk Junction', 'Haunted hills', 'Pleasent Park', 'The
 , 'Paradise Palms', 'Lucky Landing'];
 const landing_intro = [' is going to land in', ' is going to drop in', ' will decide to land in', ' will decide to drop in', 'is thinking on landing in', 'is thinking on dropping in'];
 const vehicle_intro = [' got his hands on a mech. Do you think he', ' got inside a metal beast. Do you think he', ' is playing with power, engineering power. Do you think he'];
-const eye_storm_intro = ['is putting up a good fight but the storm eye is shrinking. Will he take any damage from it'];
+const eye_storm_intro = ['is killing it, but the storm eye is shrinking. Will he take any damage from it'];
 
 let cache = {};
 
