@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import backgroundGif from "../img/tfue2.mp4";
+import backgroundGif from "../img/video.mp4";
 import {StyledButton, ButtonGroup, StyledButtonSecondary} from './ui/button';
 import posed from 'react-pose';
 import './styles.css';
@@ -201,58 +201,6 @@ class Home extends React.Component{
       }
     return <div style={{display: 'flex', justifyContent: 'center'}}>
       <div>
-          {/* <ButtonGroup>
-                <p>Kills</p>
-                <StyledButton
-                  style={{ marginRight: '1.7em' }}
-                  // onClick={onFindWord}
-                >
-                  +
-                </StyledButton>
-                <input>
-                  4
-                </input>
-                <StyledButtonSecondary
-                  style={{ marginLeft: '1.7em' }}
-                  // onClick={onReset}
-                >
-                  -
-                </StyledButtonSecondary>
-          </ButtonGroup>
-          <ButtonGroup>
-                <StyledButton
-                  style={{ marginRight: '1.7em' }}
-                  // onClick={onFindWord}
-                >
-                  +
-                </StyledButton>
-                <input>
-                  4
-                </input>
-                <StyledButtonSecondary
-                  style={{ marginLeft: '1.7em' }}
-                  // onClick={onReset}
-                >
-                  -
-                </StyledButtonSecondary>
-          </ButtonGroup>
-          <ButtonGroup>
-                <StyledButton
-                  style={{ marginRight: '1.7em' }}
-                  // onClick={onFindWord}
-                >
-                  +
-                </StyledButton>
-                <div>
-                  4
-                </div>
-                <StyledButtonSecondary
-                  style={{ marginLeft: '1.7em' }}
-                  // onClick={onReset}
-                >
-                  -
-                </StyledButtonSecondary>
-          </ButtonGroup> */}
           <div className='gameState'>
             <form onSubmit={this.handleSubmit}>
               <p>Kills</p>
